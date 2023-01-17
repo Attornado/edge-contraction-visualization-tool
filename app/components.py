@@ -28,8 +28,17 @@ def upload_button(text: str = "Upload CSV File", comp_id: str = "upload-btn", ed
     ])
 
 
-def show_steps_radio() -> dbc.RadioItems:
-    return dbc.RadioItems(
+def random_graph_options():
+    return html.Div([
+        dbc.InputGroup([
+            dbc.Input(type="number", min=1, max=1000, step=1, id="nodes", placeholder="Number of nodes"),
+            dbc.Button("Generate random graph", id="random-graph-btn", n_clicks=0)
+        ])
+    ])
+
+
+def show_steps_radio() -> html.Div:
+    return html.Div(children=[dbc.RadioItems(
         id="radios",
         className="btn-group",
         inputClassName="btn-check",
@@ -40,7 +49,7 @@ def show_steps_radio() -> dbc.RadioItems:
             {"label": "No", "value": 0}
         ],
         value=1,
-    )
+    )])
 
 
 def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text",  special_edges: Optional[set] = None):
@@ -174,7 +183,8 @@ def main_page():
             children='ECVT: Edge Contraction Visualization Tool',
             style={
                 'textAlign': 'center',
-                'color': COLORS['text']
+                'color': COLORS['text'],
+                "margin-top": "5%",
             }
         ),
 
@@ -209,6 +219,13 @@ def main_page():
                         'textAlign': 'center',
                         'marginTop': '5%'
                     }
+                ),
+                html.P(["or"]),
+                html.Div(
+                    id="random-graph-options-container",
+                    children=[
+                        random_graph_options()
+                    ]
                 ),
                 html.Div(
                     id="show-steps-radio-btn-container",

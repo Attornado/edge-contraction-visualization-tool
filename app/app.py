@@ -30,19 +30,27 @@ app.layout = main_page()
      Output(component_id='current-contents', component_property="data"),
      Output(component_id='user-input-div', component_property='style'),
      Output(component_id='refresh-btn', component_property='style')],
-    Input(component_id='upload-btn', component_property='contents'),
+    [Input(component_id='upload-btn', component_property='contents'),
+     Input(component_id="random-graph-btn", component_property="n_clicks")],
     [State(component_id='upload-btn', component_property='filename'),
-     State(component_id="radios", component_property="value")],
+     State(component_id="radios", component_property="value"),
+     State(component_id='nodes', component_property="value")],
     prevent_initial_call=True
 )
-def update_output_div(contents, filename, show_steps: int):
-    g = nx.random_geometric_graph(50, 0.1)
+def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int, n_nodes_random_graph: int):
 
-    g = nx.Graph()
+    # If filename is given then generate the graph corresponding to the file
+    if filename:
+        g = nx.Graph()
 
-    g.add_edges_from([(1, i) for i in range(2, 200)])
+        g.add_edges_from([(1, i) for i in range(2, 200)])
 
-    special_edges = set([(1, i) for i in range(2, 50)])
+        special_edges = set([(1, i) for i in range(2, 50)])
+
+    # Otherwise, generate random graph with the specified number of nodes
+    else:
+        g = nx.random_geometric_graph(n_nodes_random_graph, 0.1)
+        special_edges = []
 
     fig = graph_plot(g, "ciao grafo", text="descrizione", special_edges=special_edges)
 

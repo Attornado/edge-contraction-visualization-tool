@@ -50,14 +50,35 @@ body {
     color: lightgray;
 }
 
+#upload-btn button{
+    color: lightgray!important;
+}
+
 #user-input-div label{
     display: block;
     margin-bottom: 20px;
 }
 
 #user-input-div #show-steps-radio-btn-container{
-    margin-top: 2%;
+    margin-top: 5%;
     text-align: center;
+}
+
+#user-input-div p{
+    margin-top: 5%;
+}
+#random-graph-options-container{
+    margin-top: 5%;
+}
+
+#random-graph-options-container input[type="number"]{
+    background-color: grey;
+    color: lightgray;
+    border-color: grey;
+}
+
+#random-graph-options-container input[type="number"]::placeholder{
+    color: lightgray;
 }
 
 .pagination {
