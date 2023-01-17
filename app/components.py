@@ -1,11 +1,13 @@
 import random
 from typing import Optional, final, Union
 import dash.development.base_component
+import pandas as pd
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import networkx as nx
 
+from business.utils import edge_cut_dataframe
 
 _POSITION_ATTRIBUTE: final = "pos"
 _X_MIN: final = 0
@@ -26,6 +28,41 @@ def upload_button(text: str = "Upload CSV File", comp_id: str = "upload-btn", ed
     return html.Div([
         dcc.Upload(html.Button(text), id=comp_id)
     ])
+
+
+def edge_cut_tables(cut_edges_opt: set[tuple[int, int]], cut_edges_output: set[tuple[int, int]]):
+
+    df = edge_cut_dataframe(cut_edges_opt, cut_edges_output)
+
+    return html.Div([
+        dbc.Table.from_dataframe(df, id="cut-edges-opt", striped=True, bordered=True, hover=True),
+        dbc.Table.from_dataframe(df, id="cut-edges-output", striped=True, bordered=True, hover=True)
+    ])
+
+
+def random_graph_options():
+    return html.Div([
+        dbc.InputGroup([
+            dbc.Input(type="number", min=1, max=1000, step=1, id="nodes", placeholder="Number of nodes"),
+            dbc.Input(type="number", min=0, max=1, step=0.01, id="edge-prob", placeholder="Edge probability"),
+            dbc.Button("Generate random graph", id="random-graph-btn", n_clicks=0)
+        ])
+    ])
+
+
+def show_steps_radio() -> html.Div:
+    return html.Div(children=[dbc.RadioItems(
+        id="radios",
+        className="btn-group",
+        inputClassName="btn-check",
+        labelClassName="btn btn-outline-primary",
+        labelCheckedClassName="active",
+        options=[
+            {"label": "Yes", "value": 1},
+            {"label": "No", "value": 0}
+        ],
+        value=1,
+    )])
 
 
 def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text",  special_edges: Optional[set] = None):
@@ -153,17 +190,14 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
     return fig
 
 
-def refresh_page_btn():
-    return html.A(html.Button('Refresh Data'), href='/')
-
-
 def main_page():
     return dbc.Container(style={'backgroundColor': COLORS['background']}, children=[
         html.H1(
             children='ECVT: Edge Contraction Visualization Tool',
             style={
                 'textAlign': 'center',
-                'color': COLORS['text']
+                'color': COLORS['text'],
+                "margin-top": "5%",
             }
         ),
 
@@ -176,7 +210,7 @@ def main_page():
             className="graph-container",
             id="graph-container",
             children=[
-                "To begin visualization, upload a csv containing graph edges.",
+                "To begin visualization, upload a csv containing graph edges or generate a random graph.",
                 paginated([], display=False)
             ],
             style={
@@ -186,13 +220,40 @@ def main_page():
         ),
 
         html.Div(
-            id="upload-btn-container",
-            children=[upload_button(text="Upload CSV File", comp_id="upload-btn")],
-            style={
-                'color': COLORS['text'],
-                'textAlign': 'center',
-                'marginTop': '5%'
-            }
+            id="user-input-div",
+            children=[
+                html.Div(
+                    id="upload-btn-container",
+                    children=[
+                        upload_button(text="Upload CSV File", comp_id="upload-btn")
+                    ],
+                    style={
+                        'color': COLORS['text'],
+                        'textAlign': 'center',
+                        'marginTop': '5%'
+                    }
+                ),
+                html.P(["or"]),
+                html.Div(
+                    id="random-graph-options-container",
+                    children=[
+                        random_graph_options()
+                    ]
+                ),
+                html.Div(
+                    id="show-steps-radio-btn-container",
+                    children=[
+                        dbc.Label(children=["Show algorithm steps"]),
+                        show_steps_radio()
+                    ]
+                )
+            ]
+        ),
+        html.Div(
+            id="cut-tables-container",
+            children=[
+                edge_cut_tables(set([]), set([]))
+            ]
         ),
         html.Div(
             id="refresh-btn",
@@ -236,12 +297,25 @@ def paginated(components: list[dash.development.base_component.Component], displ
     if not display:
         pagination_container = html.Div(
             id="pagination-container",
-            children=[storage, pages, dbc.Pagination(id="pagination", max_value=len(components), fully_expanded=False)],
+            children=[storage, pages, dbc.Pagination(
+                id="pagination",
+                max_value=len(components),
+                fully_expanded=False,
+                first_last=True,
+                previous_next=True
+            )],
             style={"display": "none"}
         )
     else:
         pagination_container = html.Div(
             id="pagination-container",
-            children=[storage, pages, dbc.Pagination(id="pagination", max_value=len(components), fully_expanded=False)]
+            children=[storage, pages, dbc.Pagination(
+                id="pagination",
+                className="pagination-dark",
+                max_value=len(components),
+                fully_expanded=False,
+                first_last=True,
+                previous_next=True
+            )]
         )
     return pagination_container
