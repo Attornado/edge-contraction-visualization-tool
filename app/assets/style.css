@@ -54,6 +54,10 @@ body {
     color: lightgray!important;
 }
 
+#cut-tables-container{
+    display: none;
+}
+
 #user-input-div label{
     display: block;
     margin-bottom: 20px;

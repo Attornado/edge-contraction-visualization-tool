@@ -1,11 +1,13 @@
 import random
 from typing import Optional, final, Union
 import dash.development.base_component
+import pandas as pd
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import networkx as nx
 
+from business.utils import edge_cut_dataframe
 
 _POSITION_ATTRIBUTE: final = "pos"
 _X_MIN: final = 0
@@ -25,6 +27,16 @@ COLORS = {
 def upload_button(text: str = "Upload CSV File", comp_id: str = "upload-btn", edges: Optional[set] = None):
     return html.Div([
         dcc.Upload(html.Button(text), id=comp_id)
+    ])
+
+
+def edge_cut_tables(cut_edges_opt: set[tuple[int, int]], cut_edges_output: set[tuple[int, int]]):
+
+    df = edge_cut_dataframe(cut_edges_opt, cut_edges_output)
+
+    return html.Div([
+        dbc.Table.from_dataframe(df, id="cut-edges-opt", striped=True, bordered=True, hover=True),
+        dbc.Table.from_dataframe(df, id="cut-edges-output", striped=True, bordered=True, hover=True)
     ])
 
 
@@ -235,6 +247,12 @@ def main_page():
                         show_steps_radio()
                     ]
                 )
+            ]
+        ),
+        html.Div(
+            id="cut-tables-container",
+            children=[
+                edge_cut_tables(set([]), set([]))
             ]
         ),
         html.Div(
