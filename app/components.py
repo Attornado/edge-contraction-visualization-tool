@@ -28,6 +28,21 @@ def upload_button(text: str = "Upload CSV File", comp_id: str = "upload-btn", ed
     ])
 
 
+def show_steps_radio() -> dbc.RadioItems:
+    return dbc.RadioItems(
+        id="radios",
+        className="btn-group",
+        inputClassName="btn-check",
+        labelClassName="btn btn-outline-primary",
+        labelCheckedClassName="active",
+        options=[
+            {"label": "Yes", "value": 1},
+            {"label": "No", "value": 0}
+        ],
+        value=1,
+    )
+
+
 def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text",  special_edges: Optional[set] = None):
 
     if special_edges is None:
@@ -153,10 +168,6 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
     return fig
 
 
-def refresh_page_btn():
-    return html.A(html.Button('Refresh Data'), href='/')
-
-
 def main_page():
     return dbc.Container(style={'backgroundColor': COLORS['background']}, children=[
         html.H1(
@@ -186,13 +197,27 @@ def main_page():
         ),
 
         html.Div(
-            id="upload-btn-container",
-            children=[upload_button(text="Upload CSV File", comp_id="upload-btn")],
-            style={
-                'color': COLORS['text'],
-                'textAlign': 'center',
-                'marginTop': '5%'
-            }
+            id="user-input-div",
+            children=[
+                html.Div(
+                    id="upload-btn-container",
+                    children=[
+                        upload_button(text="Upload CSV File", comp_id="upload-btn")
+                    ],
+                    style={
+                        'color': COLORS['text'],
+                        'textAlign': 'center',
+                        'marginTop': '5%'
+                    }
+                ),
+                html.Div(
+                    id="show-steps-radio-btn-container",
+                    children=[
+                        dbc.Label(children=["Show algorithm steps"]),
+                        show_steps_radio()
+                    ]
+                )
+            ]
         ),
         html.Div(
             id="refresh-btn",
@@ -236,12 +261,25 @@ def paginated(components: list[dash.development.base_component.Component], displ
     if not display:
         pagination_container = html.Div(
             id="pagination-container",
-            children=[storage, pages, dbc.Pagination(id="pagination", max_value=len(components), fully_expanded=False)],
+            children=[storage, pages, dbc.Pagination(
+                id="pagination",
+                max_value=len(components),
+                fully_expanded=False,
+                first_last=True,
+                previous_next=True
+            )],
             style={"display": "none"}
         )
     else:
         pagination_container = html.Div(
             id="pagination-container",
-            children=[storage, pages, dbc.Pagination(id="pagination", max_value=len(components), fully_expanded=False)]
+            children=[storage, pages, dbc.Pagination(
+                id="pagination",
+                className="pagination-dark",
+                max_value=len(components),
+                fully_expanded=False,
+                first_last=True,
+                previous_next=True
+            )]
         )
     return pagination_container

@@ -28,13 +28,14 @@ app.layout = main_page()
     [Output(component_id='graph-container', component_property='children'),
      Output(component_id='pagination-container', component_property='style'),
      Output(component_id='current-contents', component_property="data"),
-     Output(component_id='upload-btn', component_property='style'),
+     Output(component_id='user-input-div', component_property='style'),
      Output(component_id='refresh-btn', component_property='style')],
     Input(component_id='upload-btn', component_property='contents'),
-    State(component_id='upload-btn', component_property='filename'),
+    [State(component_id='upload-btn', component_property='filename'),
+     State(component_id="radios", component_property="value")],
     prevent_initial_call=True
 )
-def update_output_div(contents, filename):
+def update_output_div(contents, filename, show_steps: int):
     g = nx.random_geometric_graph(50, 0.1)
 
     g = nx.Graph()
