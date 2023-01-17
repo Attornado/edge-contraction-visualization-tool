@@ -64,6 +64,10 @@ body {
     text-align: center;
 }
 
+#edge-prob{
+    border-left: 2px solid #ccc;
+}
+
 #user-input-div p{
     margin-top: 5%;
 }

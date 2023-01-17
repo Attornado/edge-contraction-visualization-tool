@@ -32,6 +32,7 @@ def random_graph_options():
     return html.Div([
         dbc.InputGroup([
             dbc.Input(type="number", min=1, max=1000, step=1, id="nodes", placeholder="Number of nodes"),
+            dbc.Input(type="number", min=0, max=1, step=0.01, id="edge-prob", placeholder="Edge probability"),
             dbc.Button("Generate random graph", id="random-graph-btn", n_clicks=0)
         ])
     ])
@@ -197,7 +198,7 @@ def main_page():
             className="graph-container",
             id="graph-container",
             children=[
-                "To begin visualization, upload a csv containing graph edges.",
+                "To begin visualization, upload a csv containing graph edges or generate a random graph.",
                 paginated([], display=False)
             ],
             style={

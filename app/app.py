@@ -34,10 +34,12 @@ app.layout = main_page()
      Input(component_id="random-graph-btn", component_property="n_clicks")],
     [State(component_id='upload-btn', component_property='filename'),
      State(component_id="radios", component_property="value"),
-     State(component_id='nodes', component_property="value")],
+     State(component_id='nodes', component_property="value"),
+     State(component_id="edge-prob", component_property="value")],
     prevent_initial_call=True
 )
-def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int, n_nodes_random_graph: int):
+def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int, n_nodes_random_graph: int,
+                      edge_probability_random_graph: float):
 
     # If filename is given then generate the graph corresponding to the file
     if filename:
@@ -49,7 +51,7 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
 
     # Otherwise, generate random graph with the specified number of nodes
     else:
-        g = nx.random_geometric_graph(n_nodes_random_graph, 0.1)
+        g = nx.random_geometric_graph(n_nodes_random_graph, edge_probability_random_graph)
         special_edges = []
 
     fig = graph_plot(g, "ciao grafo", text="descrizione", special_edges=special_edges)
