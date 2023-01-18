@@ -65,7 +65,7 @@ body {
     margin-bottom: 20px;
 }
 
-#user-input-div #show-steps-radio-btn-container{
+#user-input-div #algorithm-options-container{
     margin-top: 5%;
     text-align: center;
 }
@@ -78,18 +78,23 @@ body {
     margin-top: 5%;
 }
 
-#random-graph-options-container{
+#random-graph-options-container, #algorithm-options-container{
     margin-top: 5%;
 }
 
-#random-graph-options-container input[type="number"]{
+#random-graph-options-container input[type="number"], #algorithm-options-container input[type="number"]{
     background-color: grey;
     color: lightgray;
     border-color: grey;
 }
 
-#random-graph-options-container input[type="number"]::placeholder {
+#random-graph-options-container input[type="number"]::placeholder,
+#algorithm-options-container input[type="number"]::placeholder{
     color: lightgray;
+}
+
+.radio-container{
+    margin-right: 1%;
 }
 
 .pagination {
@@ -148,6 +153,15 @@ body {
 #close-modal {
 
 }
+
+h1 a {
+    color: inherit;
+}
+
+h1 a:hover {
+    color: inherit;
+}
+
 /* Return up button start */
 #scrollUpBtn {
     display: inline-block;

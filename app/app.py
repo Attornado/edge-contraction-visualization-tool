@@ -37,12 +37,13 @@ app.layout = main_page()
      Input(component_id="random-graph-btn", component_property="n_clicks")],
     [State(component_id='upload-btn', component_property='filename'),
      State(component_id="radios", component_property="value"),
+     State(component_id="n_iter_max", component_property="value"),
      State(component_id='nodes', component_property="value"),
      State(component_id="edge-prob", component_property="value")],
     prevent_initial_call=True
 )
-def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int, n_nodes_random_graph: int,
-                      edge_probability_random_graph: float):
+def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int, n_iter_max: int,
+                      n_nodes_random_graph: int, edge_probability_random_graph: float):
 
     # If filename is given then generate the graph corresponding to the file
     if filename:

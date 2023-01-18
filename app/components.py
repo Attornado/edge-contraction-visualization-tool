@@ -105,6 +105,18 @@ def random_graph_options() -> html.Div:
     ])
 
 
+def algorithm_options() -> html.Div:
+    return html.Div([
+        dbc.InputGroup([
+            html.Div([
+                dbc.Label(children=["Show algorithm steps"]),
+                show_steps_radio()
+            ], className="radio-container"),
+            dbc.Input(type="number", min=1, max=100000, step=1, id="n_iter_max", placeholder="Max iterations"),
+        ])
+    ])
+
+
 def show_steps_radio() -> html.Div:
     return html.Div(children=[dbc.RadioItems(
         id="radios",
@@ -248,7 +260,10 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
 def main_page() -> dbc.Container:
     return dbc.Container(style={'backgroundColor': COLORS['background']}, children=[
         html.H1(
-            children='ECVT: Edge Contraction Visualization Tool',
+            children=[html.A('ECVT: Edge Contraction Visualization Tool', href="/", style={
+                "text-decoration": "none",
+                "hoverable": False
+            })],
             style={
                 'textAlign': 'center',
                 'color': COLORS['text'],
@@ -296,10 +311,9 @@ def main_page() -> dbc.Container:
                     ]
                 ),
                 html.Div(
-                    id="show-steps-radio-btn-container",
+                    id="algorithm-options-container",
                     children=[
-                        dbc.Label(children=["Show algorithm steps"]),
-                        show_steps_radio()
+                        algorithm_options()
                     ]
                 )
             ]
