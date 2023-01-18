@@ -1,3 +1,4 @@
+import ast
 import base64
 import io
 from typing import final, Iterable, Optional
@@ -9,6 +10,21 @@ import random
 EDGE_CUT_OPT: final = "edge_cut_opt"
 EDGE_CUT_OUTPUT: final = "edge_cut_output"
 EDGE: final = "edge"
+
+
+def parse_tuple(string: str):
+    """
+    Takes a string, evaluates it as a Python expression, and returns the result if it's a tuple.
+
+    :param string: str
+    :type string: str
+    :return: A tuple of the form (x_1, x_2, ..., x_n)
+    """
+    s = ast.literal_eval(str(string))
+    if type(s) == tuple:
+        return s
+    else:
+        raise ValueError("Given string is not a tuple.")
 
 
 def parse_csv(contents, filename):

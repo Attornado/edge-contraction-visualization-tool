@@ -1,7 +1,8 @@
-from __future__ import annotations  # enable type annotation
+from __future__ import annotations  # enable type annotation with a certain class within the same class definition
 from typing import Optional, Iterable, Union
 import networkx as nx
-from business.utils import ListDict
+import pandas as pd
+from business.utils import ListDict, EDGE, parse_tuple
 
 
 class EdgeContractionStep(object):
@@ -269,3 +270,23 @@ def edge_contraction(g: nx.Graph, return_all_steps: bool = False, max_iter: int 
             best_alg_steps = alg_steps
 
     return best_cut, best_alg_steps
+
+
+def graph_from_df(df: pd.DataFrame) -> nx.Graph:
+    """
+    Takes a dataframe with an edge column, and it returns a networkx graph containing the read edges.
+
+    :param df: pd.DataFrame containing the edge information
+    :type df: pd.DataFrame
+    :return: A graph object with the read edges
+    """
+
+    # Convert read strings into tuples
+    df[EDGE] = df[EDGE].apply(lambda edge: parse_tuple(edge) if type(edge) == str else edge)
+    edges = df[EDGE].to_list()
+
+    # Create graph
+    g = nx.Graph()
+    g.add_edges_from(edges)
+
+    return g
