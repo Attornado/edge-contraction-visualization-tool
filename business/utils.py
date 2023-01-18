@@ -1,8 +1,9 @@
 import base64
 import io
-from typing import final
+from typing import final, Iterable, Optional
 import pandas as pd
 from dash import html
+import random
 
 
 EDGE_CUT_OPT: final = "edge_cut_opt"
@@ -91,3 +92,121 @@ def edge_cut_dataframe(cut_edges_opt: set[tuple[int, int]], cut_edges_output: se
         jaccard_sim = count_intersection / count
 
     return df, jaccard_sim
+
+
+class ListDict(object):
+    def __init__(self, initial_values: Optional[Iterable] = None):
+        """
+        This class represent a list of items paired with a dictionary, which maps each item (that must be hash-able) to
+        the corresponding position, hallowing to do operations like delete, retrieve and insert in O(1) time, as well as
+        random selection.
+        """
+        self.__item_to_position = {}
+        self.__items = []
+
+        if initial_values is not None:
+            self.extend(initial_values)
+
+    def extend(self, items: Iterable):
+        """
+        Add a list of items to the list-dict.
+
+        :param items: Iterable containing items to add to the list-dict
+        :type items: Iterable
+        """
+        for item in items:
+            self.add(item)
+
+    def add(self, item):
+        """
+        Adds an element to the list-dict in O(1) time.
+
+        :param item: The item to add to the list
+        :return: The position of the item in the list.
+        """
+        if item in self.__item_to_position:
+            return
+        self.__items.append(item)
+        self.__item_to_position[item] = len(self.__items) - 1
+
+    def remove(self, item):
+        """
+        Removes the item from the list in O(1) time.
+
+        :param item: The item to remove from the set
+        """
+        position = self.__item_to_position.pop(item)
+        last_item = self.__items.pop()
+        if position != len(self.__items):
+            self.__items[position] = last_item
+            self.__item_to_position[last_item] = position
+
+    def choose_random(self, sample_size: int = 1):
+        """
+        Returns a random item from the list-dict of items in O() time, where k is the required sample size.
+
+        :param sample_size: sample size.
+
+        :return: A list with sample_size random items from the list-dict if sample_size > 1, a single random item with
+            if sample_size = 1.
+        """
+        random_items = []
+        for _ in range(0, sample_size):
+            random_items.append(random.choice(self.__items))
+        if sample_size == 1:
+            return random_items[0]
+        else:
+            return random_items
+
+    def position(self, item) -> int:
+        """
+        It returns the position of the item in the list-dict.
+
+        :param item: The item to find the position of
+        :return: The position of the item in the list-dict.
+        """
+        return self.__item_to_position[item]
+
+    def to_list(self) -> list:
+        """
+        Returns a list containing all the items in the list-dict.
+
+        :return: the contents of the list-dict as a list.
+        :rtype: list
+        """
+        return list(self.__items)
+
+    def __getitem__(self, index):
+        """
+        Returns the item at the given index.
+
+        :param index: The index of the item you want to retrieve
+        :return: The item at the given index.
+        """
+        return self.__items[index]
+
+    def __contains__(self, item):
+        """
+        If the item is in the dictionary, return True. Otherwise, return False. This runs in O(1) time.
+
+        :param item: The item to check for membership
+        :return: The position of the item in the list.
+        """
+        return item in self.__item_to_position
+
+    def __iter__(self):
+        """
+        Returns an iterator object that can be used to iterate over the items in the list-dict.
+        :return: The iter() function is being called on the list of items.
+        """
+        return iter(self.__items)
+
+    def __len__(self):
+        """
+        The function returns the length of the list-dict of items.
+        :return: The length of the list-dict.
+        """
+        return len(self.__items)
+
+    def __str__(self):
+        return str(self.__items) + "\n" + str(self.__item_to_position)
