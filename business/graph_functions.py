@@ -7,7 +7,8 @@ from business.utils import ListDict
 class SuperNode(object):
     def __init__(self, node: int):
         """
-        This function initializes the supernode and the set of contracted nodes.
+        This class represents a super-node in the edge contraction algorithm, and it is characterized by a node
+        identifier and a set of contracted nodes.
 
         :param node: The supernode.
         :type node: int
