@@ -73,20 +73,20 @@ class SuperNode(object):
 
 
 def replace_edges_incident_to_contracted_node(edges: ListDict, contracted_incident_edges: list[tuple[int, int]],
-                                              contracting_node: int, contracted_node: int):
+                                              contracted_node: int, contracting_node: int):
     """
-    For each edge incident to the contracted node, remove it from the edge list-dict and replace it with the new edge
-    incident to the contracting node
+    For each edge (v, w)/(w, v) edge incident to the contracted node v, remove it from the edge list-dict and replace it
+    with the new edge (u, w)/(w, u) incident to the contracting node.
 
     :param edges: The list-dict of edges in the graph
     :type edges: ListDict
-    :param contracted_incident_edges: a list of tuples of the form (v, w) or (w, v) where v is the contracted node and w
+    :param contracted_incident_edges: a list of edges of the form (v, w) or (w, v), where v is the contracted node and w
         is the other node in the edge
     :type contracted_incident_edges: list[tuple[int, int]]
-    :param contracting_node: The node that is being contracted
-    :type contracting_node: int
     :param contracted_node: the node that is being contracted
     :type contracted_node: int
+    :param contracting_node: The node that in which the contracted_node is being contracted
+    :type contracting_node: int
     """
 
     # For each (v, w) or (w, v) edge incident to the contracted node
@@ -120,8 +120,11 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
     :type g: nx.Graph
     :param return_all_steps: If True, the algorithm will return a list of all the graphs it generated during the
         algorithm, defaults to False (optional)
+    :type return_all_steps: bool
+
     :return: The cut and the graphs obtained during the steps of the algorithm
     """
+
     g_copy = g.copy()
     supernodes = {node: SuperNode(node) for node in g_copy.nodes}
     alg_steps = None
@@ -175,12 +178,33 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
 
 def edge_contraction(g: nx.Graph, return_all_steps: bool = False, max_iter: int = 1) -> (set[tuple[int, int]],
                                                                                          Optional[list[nx.Graph]]):
+    """
+    Takes a graph, repeats the execution of the edge-contraction algorithm on it for the given maximum number
+    iterations, returning the found cut and (optionally) a list of all the graphs obtained during the algorithm the best
+    execution. If the given graph is not connected, an empty cut is returned.
+
+    :param g: The graph to find a cut of
+    :type g: nx.Graph
+    :param return_all_steps: If True, the algorithm will return a list of all the graphs it generated during the
+        algorithm, defaults to False
+    :param max_iter: An integer representing the maximum number of executions of the edge contraction algorithm to
+        perform, defaults to 1
+    :type max_iter: int
+
+    :return: The cut and the graphs obtained during the steps of the algorithm
+    """
     # Initialize best cut size, best cut and best algorithm execution history
     best_cut_size = -1
     best_cut = set()
     best_alg_steps = None
 
-    # Execute the algorithm max_iter times
+    # If the given graph is not connected, return empty cut
+    if not nx.is_connected(g):
+        if return_all_steps:
+            best_alg_steps = []
+        return best_cut, best_alg_steps
+
+    # Otherwise execute the algorithm max_iter times
     for i in range(0, max_iter):
         cut, alg_steps = _edge_contraction(g=g, return_all_steps=return_all_steps)
 
