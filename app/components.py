@@ -1,13 +1,12 @@
 import random
 from typing import Optional, final, Union
 import dash.development.base_component
-import sklearn.metrics.pairwise as sklmp
-import pandas as pd
-from dash import dcc, html, dash_table
+from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import networkx as nx
 from business.utils import edge_cut_dataframe, EDGE_CUT_OUTPUT, EDGE_CUT_OPT, EDGE
+
 
 _POSITION_ATTRIBUTE: final = "pos"
 _X_MIN: final = 0
