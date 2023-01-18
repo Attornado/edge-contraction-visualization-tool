@@ -111,7 +111,7 @@ def replace_edges_incident_to_contracted_node(edges: ListDict, contracted_incide
                 edges.add(new_edge)
 
 
-def edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (Optional[list[nx.Graph]], set[tuple[int, int]]):
+def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple[int, int]], Optional[list[nx.Graph]]):
     """
     Takes a graph, performs the edge-contraction algorithm on it, returning the found cut and (optionally) a list of all
     the graphs obtained during the algorithm execution.
@@ -171,3 +171,22 @@ def edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (Optional[l
             cut.add(edge)
 
     return cut, alg_steps
+
+
+def edge_contraction(g: nx.Graph, return_all_steps: bool = False, max_iter: int = 1) -> (set[tuple[int, int]],
+                                                                                         Optional[list[nx.Graph]]):
+    # Initialize best cut size, best cut and best algorithm execution history
+    best_cut_size = -1
+    best_cut = set()
+    best_alg_steps = None
+
+    # Execute the algorithm max_iter times
+    for i in range(0, max_iter):
+        cut, alg_steps = _edge_contraction(g=g, return_all_steps=return_all_steps)
+
+        if best_cut_size == -1 or len(cut) < best_cut_size:
+            best_cut_size = len(cut)
+            best_cut = cut
+            best_alg_steps = alg_steps
+
+    return best_cut, best_alg_steps
