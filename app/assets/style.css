@@ -25,6 +25,7 @@ body {
 
 #refresh-btn{
     display: none;
+    margin-bottom: 2%;
 }
 
 #refresh-btn a {
@@ -56,6 +57,7 @@ body {
 
 #cut-tables-container{
     display: none;
+    text-align: center;
 }
 
 #user-input-div label{
@@ -75,6 +77,7 @@ body {
 #user-input-div p{
     margin-top: 5%;
 }
+
 #random-graph-options-container{
     margin-top: 5%;
 }
@@ -85,7 +88,7 @@ body {
     border-color: grey;
 }
 
-#random-graph-options-container input[type="number"]::placeholder{
+#random-graph-options-container input[type="number"]::placeholder {
     color: lightgray;
 }
 
@@ -113,8 +116,40 @@ body {
     list-style: none;
 }
 
+#edge-cut-table{
+    background-color: #444;
+    color: lightgrey;
+}
+
+#edge-cut-table th, #metrics-table th{
+    font-weight: bold;
+    text-align: center;
+}
+
+#edge-cut-table td, #edge-cut-table th, #metrics-table th{
+    background-color: #444;
+    text-align: center;
+}
+
+#metrics-table td{
+    text-align: center;
+    background-color: #222222;
+}
+
+#open-modal{
+    margin-bottom:2.5%
+}
+
+#modal .modal-content {
+    background-color: #222222;
+    color: lightgray;
+}
+
+#close-modal {
+
+}
 /* Return up button start */
-#scrollUpBtn{
+#scrollUpBtn {
     display: inline-block;
     background-color: rgba(48, 48, 48, 0.4);
     color: lightgray;

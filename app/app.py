@@ -1,8 +1,9 @@
 import os
+from random import randint
 import networkx as nx
 import plotly.express as px
 import pandas as pd
-from components import upload_button, graph_plot, main_page, COLORS, paginated
+from components import upload_button, graph_plot, main_page, COLORS, paginated, edge_cut_tables
 from dash import Dash, dcc, html, Input, Output, State
 import dash_bootstrap_components as dbc
 import business.utils as utl
@@ -29,7 +30,9 @@ app.layout = main_page()
      Output(component_id='pagination-container', component_property='style'),
      Output(component_id='current-contents', component_property="data"),
      Output(component_id='user-input-div', component_property='style'),
-     Output(component_id='refresh-btn', component_property='style')],
+     Output(component_id='refresh-btn', component_property='style'),
+     Output(component_id='cut-tables-container', component_property='children'),
+     Output(component_id='cut-tables-container', component_property='style')],
     [Input(component_id='upload-btn', component_property='contents'),
      Input(component_id="random-graph-btn", component_property="n_clicks")],
     [State(component_id='upload-btn', component_property='filename'),
@@ -97,11 +100,16 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
 
     paginated_graphs = paginated(graph_figs)
 
+    edges = list(g.edges)
+    edge_cut_opt = edge_cut_output = set([edges[randint(0, len(edges) - 1)] for _ in range(0, len(edges)//3)])
+
     return [paginated_graphs], \
         {"display": "block"}, \
         graph_figs, \
         {"display": "none"}, \
-        {"display": "block", 'color': COLORS['text'], 'textAlign': 'center', 'marginTop': '5%'}
+        {"display": "block", 'color': COLORS['text'], 'textAlign': 'center', 'marginTop': '5%'}, \
+        [edge_cut_tables(edge_cut_opt, edge_cut_output)], \
+        {"display": "block"}
 
 
 # Pagination callback
@@ -115,6 +123,17 @@ def change_page(page, page_contents):
     new_pages = paginated(page_contents, contents_only=True, index_to_display=page - 1)
 
     return new_pages
+
+
+@app.callback(
+    Output("modal", "is_open"),
+    [Input("open-modal", "n_clicks"), Input("close-modal", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 
 if __name__ == '__main__':
