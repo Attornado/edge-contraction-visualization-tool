@@ -1,13 +1,13 @@
 import random
 from typing import Optional, final, Union
 import dash.development.base_component
+import sklearn.metrics.pairwise as sklmp
 import pandas as pd
-from dash import dcc, html
+from dash import dcc, html, dash_table
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import networkx as nx
-
-from business.utils import edge_cut_dataframe
+from business.utils import edge_cut_dataframe, EDGE_CUT_OUTPUT, EDGE_CUT_OPT, EDGE
 
 _POSITION_ATTRIBUTE: final = "pos"
 _X_MIN: final = 0
@@ -24,23 +24,78 @@ COLORS = {
 }
 
 
-def upload_button(text: str = "Upload CSV File", comp_id: str = "upload-btn", edges: Optional[set] = None):
+def upload_button(text: str = "Upload CSV File", comp_id: str = "upload-btn") -> html.Div:
     return html.Div([
         dcc.Upload(html.Button(text), id=comp_id)
     ])
 
 
-def edge_cut_tables(cut_edges_opt: set[tuple[int, int]], cut_edges_output: set[tuple[int, int]]):
+def content_modal(header_title: str, content: list[dash.development.base_component.Component]) -> (dbc.Button,
+                                                                                                   dbc.Modal):
+    btn = dbc.Button(children=["Cut comparison"], id="open-modal", n_clicks=0)
+    modal = dbc.Modal(
+        [
+            dbc.ModalHeader(dbc.ModalTitle(header_title)),
+            dbc.ModalBody(children=content),
+            dbc.ModalFooter(
+                dbc.Button(children=["Close"], id="close-modal", className="ms-auto btn-secondary", color="white", n_clicks=0)
+            ),
+        ],
+        id="modal",
+        is_open=False,
+        size="xl"
+    )
+    return btn, modal
 
-    df = edge_cut_dataframe(cut_edges_opt, cut_edges_output)
+
+def edge_cut_tables(cut_edges_opt: set[tuple[int, int]], cut_edges_output: set[tuple[int, int]]) -> html.Div:
+
+    df, jaccard_sim = edge_cut_dataframe(cut_edges_opt, cut_edges_output)
+
+    if len(cut_edges_opt) == 0:
+        division = 0
+    else:
+        division = len(cut_edges_output) / len(cut_edges_opt)
+
+    df[EDGE] = df[EDGE].apply(lambda edge: str(edge))  # Convert tuples to string
+    df[EDGE_CUT_OPT] = df[EDGE_CUT_OPT].apply(lambda x: "Yes" if x else "No")  # Convert bool to string
+    df[EDGE_CUT_OUTPUT] = df[EDGE_CUT_OUTPUT].apply(lambda x: "Yes" if x else "No")  # Convert bool to string
+
+    df.rename(
+        columns={EDGE: "Edge", EDGE_CUT_OPT: 'Optimal Cut', EDGE_CUT_OUTPUT: 'Output Cut'}, inplace=True
+    )  # Rename columns
+
+    btn, modal = content_modal("Edge cut comparison table", content=[
+        dbc.Table.from_dataframe(
+            id="edge-cut-table",
+            df=df,
+            bordered=True,
+            dark=True,
+            hover=True,
+            responsive=True,
+            striped=True
+        )
+    ])
 
     return html.Div([
-        dbc.Table.from_dataframe(df, id="cut-edges-opt", striped=True, bordered=True, hover=True),
-        dbc.Table.from_dataframe(df, id="cut-edges-output", striped=True, bordered=True, hover=True)
+        btn,
+        modal,
+        dbc.Table(
+            children=[
+                html.Thead(html.Tr([html.Th("Jaccard similarity"), html.Th("|OUTPUT_CUT|/|OPT_CUT|")])),
+                html.Tr([html.Td(str(jaccard_sim)), html.Td(str(division))])
+            ],
+            id="metrics-table",
+            bordered=True,
+            dark=True,
+            hover=True,
+            responsive=True,
+            striped=True
+        )
     ])
 
 
-def random_graph_options():
+def random_graph_options() -> html.Div:
     return html.Div([
         dbc.InputGroup([
             dbc.Input(type="number", min=1, max=1000, step=1, id="nodes", placeholder="Number of nodes"),
@@ -190,7 +245,7 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
     return fig
 
 
-def main_page():
+def main_page() -> dbc.Container:
     return dbc.Container(style={'backgroundColor': COLORS['background']}, children=[
         html.H1(
             children='ECVT: Edge Contraction Visualization Tool',
