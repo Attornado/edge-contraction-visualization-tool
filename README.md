@@ -8,7 +8,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  ![alt text](https://github.com/Attornado/edge-contraction-visualization-tool/tree/blob/main/app/assets/ecvt.png?raw=true)
+  ![Alt text](/app/assets/ecvt.png?raw=true)
 </div>
 
 
@@ -31,7 +31,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-![alt text](https://github.com/Attornado/edge-contraction-visualization-tool/tree/blob/main/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/screenshot.png?raw=true)
 
 A simple visual tool allowing to visualize the execution of the Karger's edge-contraction
 algorithm.
