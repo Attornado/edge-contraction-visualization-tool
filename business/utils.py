@@ -103,7 +103,7 @@ def edge_cut_dataframe(cut_edges_opt: set[tuple[int, int]], cut_edges_output: se
         count += 1
 
     if count == 0:
-        jaccard_sim = 0
+        jaccard_sim = 1
     else:
         jaccard_sim = count_intersection / count
 

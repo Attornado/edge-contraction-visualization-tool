@@ -1,25 +1,24 @@
 import os
-from random import randint
+from typing import final
 import networkx as nx
-import plotly.express as px
-import pandas as pd
-from components import upload_button, graph_plot, main_page, COLORS, paginated, edge_cut_tables
-from dash import Dash, dcc, html, Input, Output, State
+from components import graph_plot, main_page, COLORS, paginated, edge_cut_tables
+from dash import Dash, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 import business.utils as utl
 import business.graph_functions as gf
 
-external_stylesheets = [
+
+EXTERNAL_STYLESHEETS: final = [
     'https://codepen.io/chriddyp/pen/bWLwgP.css',
     "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
     dbc.themes.BOOTSTRAP
 ]
-
-external_scripts = [
+EXTERNAL_SCRIPTS: final = [
     "https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"
 ]
+LOG_CONTRACTION: final = False
 
-app = Dash(__name__, external_stylesheets=external_stylesheets, external_scripts=external_scripts)
+app = Dash(__name__, external_stylesheets=EXTERNAL_STYLESHEETS, external_scripts=EXTERNAL_SCRIPTS)
 
 # Build the app page
 app.layout = main_page()
@@ -63,7 +62,12 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
     # Find the best cut executing edge-contraction n_iter_max times
     if n_iter_max is None:
         n_iter_max = 1
-    output_cut, alg_steps = gf.edge_contraction(g=g, return_all_steps=show_steps, max_iter=n_iter_max)
+    output_cut, alg_steps = gf.edge_contraction(
+        g=g,
+        return_all_steps=show_steps,
+        max_iter=n_iter_max,
+        log=LOG_CONTRACTION
+    )
 
     # Find the optimal cut according to the Edmonds-Karp/Ford-Fulkerson algorithm
     opt_cut = gf.optimal_cut(g)
@@ -73,26 +77,54 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
     graph_figures = []
 
     # Starting graph figure
-    fig = graph_plot(g, title="Input graph", text=f"|V| = {len(g.nodes)}, |E| = {len(g.edges)}.")
+    if show_steps and len(alg_steps) > 0:
+        first_edge = alg_steps[0].contracted_edge  # show info on the first contracted edge if required
+        fig = graph_plot(
+            g=g,
+            title="Input graph",
+            text=f"|V| = {len(g.nodes)}, |E| = {len(g.edges)}, selected edge: {first_edge}.",
+            special_edges={first_edge}
+        )
+    else:
+        fig = graph_plot(g, title="Input graph", text=f"|V| = {len(g.nodes)}, |E| = {len(g.edges)}.")
     figures.append(fig)
 
     if show_steps:
         # For each algorithm step
-        for alg_step in alg_steps:
+        for i in range(0, len(alg_steps)):
 
-            # Create a figure with the corresponding graph alongside other information on the execution step
-            fig = graph_plot(
-                g=alg_step.graph,
-                title=f"Edge-contraction graph step #{alg_step.iter_number}",
-                text=f"Contracted edge: {alg_step.contracted_edge}."
-            )
-            figures.append(fig)
+            alg_step = alg_steps[i]  # current algorithm step info
+
+            # If current step isn't the last one
+            if alg_step.iter_number < len(alg_steps) - 1:
+
+                alg_step_next = alg_steps[i + 1]  # next algorithm step info
+                # Create a figure with the corresponding graph alongside other information on the execution step
+                fig = graph_plot(
+                    g=alg_step.graph,
+                    title=f"Edge-contraction graph step #{alg_step.iter_number + 1}",
+                    text=f"Contracted edge: {alg_step.contracted_edge}, "
+                         f"selected edge: {alg_step_next.contracted_edge}.",
+                    supernodes=alg_step.supernodes,
+                    special_edges={alg_step_next.contracted_edge}  # highlight the next edge to contract
+                )
+                figures.append(fig)
+
+            else:
+                # Create a figure with the corresponding graph alongside other information on the execution step
+                fig = graph_plot(
+                    g=alg_step.graph,
+                    title=f"Edge-contraction graph step #{alg_step.iter_number + 1}.",
+                    text=f"Contracted edge: {alg_step.contracted_edge}.",
+                    supernodes=alg_step.supernodes
+                )
+                figures.append(fig)
 
     # Edge-contraction cut figure
     fig = graph_plot(
         g=g,
         title=f"Edge-contraction cut",
-        text="Input graph with edge-contraction cut edges highlighted.",
+        text=f"Input graph with edge-contraction cut edges highlighted. |OUTPUT_CUT| = {len(output_cut)}.",
         special_edges=output_cut
     )
     figures.append(fig)
@@ -101,7 +133,7 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
     fig = graph_plot(
         g=g,
         title=f"Optimal cut",
-        text="Input graph with optimal cut edges highlighted.",
+        text=f"Input graph with optimal cut edges highlighted. |OPT_CUT| = {len(opt_cut)}.",
         special_edges=opt_cut
     )
     figures.append(fig)
@@ -116,69 +148,14 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
         )
         graph_fig = dcc.Graph(
             id=f'graph{i}',
-            figure=fig
+            figure=fig,
+            className="interactive-plot"
         )
         graph_figures.append(graph_fig)
 
     # Paginate the content
     paginated_graphs = paginated(graph_figures)
 
-
-    """
-    fig = graph_plot(g, "ciao grafo", text="descrizione", special_edges=special_edges)
-
-    fig.update_layout(
-        plot_bgcolor=COLORS['background'],
-        paper_bgcolor=COLORS['background'],
-        font_color=COLORS['text']
-    )
-
-    graph_fig = dcc.Graph(
-        id='graph',
-        figure=fig
-    )
-
-    fig = graph_plot(g, "ciao grafo2", text="descrizione", special_edges=special_edges)
-
-    fig.update_layout(
-        plot_bgcolor=COLORS['background'],
-        paper_bgcolor=COLORS['background'],
-        font_color=COLORS['text']
-    )
-
-    graph_fig2 = dcc.Graph(
-        id='graph2',
-        figure=fig
-    )
-
-    fig = graph_plot(g, "ciao grafo3", text="descrizione", special_edges=special_edges)
-
-    fig.update_layout(
-        plot_bgcolor=COLORS['background'],
-        paper_bgcolor=COLORS['background'],
-        font_color=COLORS['text']
-    )
-
-    graph_fig3 = dcc.Graph(
-        id='graph3',
-        figure=fig
-    )
-
-    graph_figs = [graph_fig, graph_fig2, graph_fig3]
-
-    paginated_graphs = paginated(graph_figs)
-
-    edges = list(g.edges)
-    edge_cut_opt = edge_cut_output = set([edges[randint(0, len(edges) - 1)] for _ in range(0, len(edges)//3)])
-    
-    return [paginated_graphs], \
-        {"display": "block"}, \
-        graph_figs, \
-        {"display": "none"}, \
-        {"display": "block", 'color': COLORS['text'], 'textAlign': 'center', 'marginTop': '5%'}, \
-        [edge_cut_tables(edge_cut_opt, edge_cut_output)], \
-        {"display": "block"}
-    """
     return [paginated_graphs], \
         {"display": "block"}, \
         graph_figures, \
