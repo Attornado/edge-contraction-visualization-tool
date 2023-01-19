@@ -24,7 +24,7 @@ app = Dash(__name__, external_stylesheets=EXTERNAL_STYLESHEETS, external_scripts
 app.layout = main_page()
 
 
-# Callbacks, eventually move these to another file
+# Callbacks
 @app.callback(
     [Output(component_id='graph-container', component_property='children'),
      Output(component_id='pagination-container', component_property='style'),
@@ -173,6 +173,13 @@ def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int
     prevent_initial_call=True
 )
 def change_page(page, page_contents):
+    """
+    It takes a page number and a list of page contents, and returns the contents of the page number that was passed in.
+
+    :param page: the page number to display
+    :param page_contents: the contents of the page
+    :return: A list of strings.
+    """
     new_pages = paginated(page_contents, contents_only=True, index_to_display=page - 1)
 
     return new_pages
@@ -184,6 +191,14 @@ def change_page(page, page_contents):
     [State("modal", "is_open")],
 )
 def toggle_modal(n1, n2, is_open):
+    """
+    If either n1 or n2 is true, return the opposite of is_open, otherwise return is_open
+
+    :param n1: The first number to be compared
+    :param n2: The number of times the button has been clicked
+    :param is_open: This is the boolean value that determines whether the modal is open or not
+    :return: the opposite of the is_open argument.
+    """
     if n1 or n2:
         return not is_open
     return is_open
