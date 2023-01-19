@@ -51,12 +51,12 @@ class EdgeContractionStep(object):
         return self.__iter_number
 
     @property
-    def super_nodes(self) -> list[SuperNode]:
+    def supernodes(self) -> dict[int, SuperNode]:
         """
         Returns a list of all the supernodes in the graph.
         :return: A list of SuperNode objects.
         """
-        return list(self.__supernodes.values())
+        return self.__supernodes
 
     def get_super_node(self, node: int) -> SuperNode:
         """
@@ -147,8 +147,28 @@ class SuperNode(object):
         elif type(supernode) == int:
             self.add_node(supernode)
 
+    def clone(self) -> SuperNode:
+        cloned = SuperNode(self.__node)
+        cloned.add_nodes(self.contracted_nodes)
+        return cloned
+
     def __str__(self):
         return str({self.__node: str(self.__contracted_nodes)})
+
+
+def _copy_supernodes(supernodes: dict[int, SuperNode]) -> dict[int, SuperNode]:
+    """
+    Creates a new dictionary of supernodes, where each supernode is a clone of the corresponding supernode in the input
+    dictionary.
+
+    :param supernodes: dict[int, SuperNode]
+    :type supernodes: dict[int, SuperNode]
+    :return: A dictionary of SuperNodes
+    """
+    copied = {}
+    for node in supernodes:
+        copied[node] = supernodes[node].clone()
+    return copied
 
 
 def _replace_edges_incident_to_contracted_node(edges: ListDict, contracted_incident_edges: list[tuple[int, int]],
@@ -190,8 +210,8 @@ def _replace_edges_incident_to_contracted_node(edges: ListDict, contracted_incid
                 edges.add(new_edge)
 
 
-def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple[int, int]],
-                                                                       Optional[list[EdgeContractionStep]]):
+def _edge_contraction(g: nx.Graph, return_all_steps: bool = False, log: bool = False) -> \
+        (set[tuple[int, int]], Optional[list[EdgeContractionStep]]):
     """
     Takes a graph, performs the edge-contraction algorithm on it, returning the found cut and (optionally) a list of
     objects describing the graphs obtained during the algorithm execution.
@@ -201,6 +221,8 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
     :param return_all_steps: If True, the algorithm will return a list of all the graphs it generated during the
         algorithm, defaults to False (optional)
     :type return_all_steps: bool
+    :param log: If True, a log of every contraction will be generated.
+    :type log: bool
 
     :return: The cut and the graphs obtained during the steps of the algorithm
     """
@@ -234,14 +256,22 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
         # If edge is (u, v), add v and all the nodes contracted in it into the u super-node
         supernodes[edge[0]].contract(supernodes[edge[1]])
 
+        # Generate contraction log if required
+        if log:
+            print(f"Contracting edge '{edge}', collapsing supernode '{edge[1]}' into '{edge[0]}' \n"
+                  f"New supernode '{edge[0]}': {str(supernodes[edge[0]])}")
+
         # Contract edge
         g_copy = nx.algorithms.contracted_edge(g_copy, edge, self_loops=False)
 
         # Add algorithm step graph to output if required
         if return_all_steps:
+            # Handle multiple copies of supernodes for each step of the algorithm
+            # Though inefficient, it can be acceptable since we are doing this just on small graphs for visualization
+            # purposes only, and this is not done in other cases
             edge_contraction_step = EdgeContractionStep(
                 graph=g_copy,
-                supernodes=supernodes,
+                supernodes=_copy_supernodes(supernodes),  # inefficient, but necessary for visualization purposes
                 contracted_edge=edge,
                 iter_number=iter_number
             )
@@ -265,7 +295,7 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
     return cut, alg_steps
 
 
-def edge_contraction(g: nx.Graph, return_all_steps: bool = False, max_iter: int = 1) -> \
+def edge_contraction(g: nx.Graph, return_all_steps: bool = False, log: bool = False, max_iter: int = 1) -> \
         (set[tuple[int, int]], Optional[list[EdgeContractionStep]]):
     """
     Takes a graph, repeats the execution of the edge-contraction algorithm on it for the given maximum number
@@ -276,6 +306,8 @@ def edge_contraction(g: nx.Graph, return_all_steps: bool = False, max_iter: int 
     :type g: nx.Graph
     :param return_all_steps: If True, the algorithm will return a list of all the graphs it generated during the
         algorithm, defaults to False
+    :param log: If True, a log of every contraction in each execution will be generated.
+    :type log: bool
     :param max_iter: An integer representing the maximum number of executions of the edge contraction algorithm to
         perform, defaults to 1
     :type max_iter: int
@@ -295,7 +327,7 @@ def edge_contraction(g: nx.Graph, return_all_steps: bool = False, max_iter: int 
 
     # Otherwise execute the algorithm max_iter times, choosing the best cut
     for i in range(0, max_iter):
-        cut, alg_steps = _edge_contraction(g=g, return_all_steps=return_all_steps)
+        cut, alg_steps = _edge_contraction(g=g, return_all_steps=return_all_steps, log=log)
 
         if best_cut_size == -1 or len(cut) < best_cut_size:
             best_cut_size = len(cut)

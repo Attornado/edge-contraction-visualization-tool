@@ -5,6 +5,7 @@ from dash import dcc, html
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 import networkx as nx
+from business.graph_functions import SuperNode
 from business.utils import edge_cut_dataframe, EDGE_CUT_OUTPUT, EDGE_CUT_OPT, EDGE
 
 
@@ -51,7 +52,9 @@ def edge_cut_tables(cut_edges_opt: set[tuple[int, int]], cut_edges_output: set[t
 
     df, jaccard_sim = edge_cut_dataframe(cut_edges_opt, cut_edges_output)
 
-    if len(cut_edges_opt) == 0:
+    if len(cut_edges_opt) == 0 and len(cut_edges_output) == 0:
+        division = 1
+    elif len(cut_edges_opt) == 0:
         division = 0
     else:
         division = len(cut_edges_output) / len(cut_edges_opt)
@@ -82,7 +85,7 @@ def edge_cut_tables(cut_edges_opt: set[tuple[int, int]], cut_edges_output: set[t
         dbc.Table(
             children=[
                 html.Thead(html.Tr([html.Th("Jaccard similarity"), html.Th("|OUTPUT_CUT|/|OPT_CUT|")])),
-                html.Tr([html.Td(str(jaccard_sim)), html.Td(str(division))])
+                html.Tr([html.Td(str(round(jaccard_sim, 4))), html.Td(str(round(division, 4)))])
             ],
             id="metrics-table",
             bordered=True,
@@ -131,7 +134,8 @@ def show_steps_radio() -> html.Div:
     )])
 
 
-def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text",  special_edges: Optional[set] = None):
+def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text",  special_edges: Optional[set] = None,
+               supernodes: Optional[dict[int, SuperNode]] = None):
 
     if special_edges is None:
         special_edges = set()
@@ -223,7 +227,13 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
     node_text = []
     for node, adjacencies in enumerate(g.adjacency()):
         node_adjacencies.append(len(adjacencies[1]))
-        node_text.append('# of connections: ' + str(len(adjacencies[1])))
+        txt = f'Node: {adjacencies[0]}, # of connections: ' + str(len(adjacencies[1]))
+
+        # Add super-node info if required
+        if supernodes is not None:
+            txt += f", Supernode info: {str(supernodes[adjacencies[0]])}"
+
+        node_text.append(txt)
 
     # Add different colors based on the node degree
     node_trace.marker.color = node_adjacencies

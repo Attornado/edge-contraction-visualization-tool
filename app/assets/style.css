@@ -23,6 +23,22 @@ body {
     display: block
 }
 
+/* Animations of the appearing plot */
+.interactive-plot, .page {
+    -webkit-animation: fadeinout 0.5s linear forwards;
+    animation: fadein 0.5s linear forwards;
+}
+
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 #refresh-btn{
     display: none;
     margin-bottom: 2%;
