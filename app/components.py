@@ -151,7 +151,7 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
         x1, y1 = g.nodes[edge[1]]['pos']
 
         # Add to the normal edge to the corresponding list
-        if edge not in special_edges:
+        if edge not in special_edges and tuple(reversed(edge)) not in special_edges:
             edge_x.append(x0)
             edge_x.append(x1)
             edge_x.append(None)
@@ -202,7 +202,7 @@ def graph_plot(g: nx.Graph, title: str = "Your title", text: str = "Your text", 
         hoverinfo='text',
         marker=dict(
             showscale=True,
-            # colorscale options
+            # color-scale options
             # 'Greys' | 'YlGnBu' | 'Greens' | 'YlOrRd' | 'Bluered' | 'RdBu' |
             # 'Reds' | 'Blues' | 'Picnic' | 'Rainbow' | 'Portland' | 'Jet' |
             # 'Hot' | 'Blackbody' | 'Earth' | 'Electric' | 'Viridis' |

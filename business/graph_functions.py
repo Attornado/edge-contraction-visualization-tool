@@ -6,19 +6,23 @@ from business.utils import ListDict, EDGE, parse_tuple
 
 
 class EdgeContractionStep(object):
-    def __init__(self, graph: nx.Graph, contracted_edge: tuple[int, int], iter_number: int):
+    def __init__(self, graph: nx.Graph, supernodes: dict[int, SuperNode], contracted_edge: tuple[int, int],
+                 iter_number: int):
         """
-        This class represent a step of the edge contraction algorithm, characterized by an iteration number, the graph
-        at that given step and the edge that has been contracted to obtain that graph.
+        This class represent a step of the edge contraction algorithm, characterized by an iteration number, a dict of
+        super-nodes, the graph at that given step and the edge that has been contracted to obtain that graph.
 
         :param graph: The graph at that given algorithm step
         :type graph: nx.Graph
+        :param supernodes: The supernodes corresponding to the graph node at the given step.
+        :type supernodes: dict[int, SuperNode]
         :param contracted_edge: The edge that has been contracted to obtain that graph
         :type contracted_edge: tuple[int, int]
         :param iter_number: The iteration number of the algorithm step
         :type iter_number: int
         """
         self.__graph = graph
+        self.__supernodes = supernodes
         self.__contracted_edge = contracted_edge
         self.__iter_number = iter_number
 
@@ -46,9 +50,30 @@ class EdgeContractionStep(object):
         """
         return self.__iter_number
 
+    @property
+    def super_nodes(self) -> list[SuperNode]:
+        """
+        Returns a list of all the supernodes in the graph.
+        :return: A list of SuperNode objects.
+        """
+        return list(self.__supernodes.values())
+
+    def get_super_node(self, node: int) -> SuperNode:
+        """
+        Returns the supernode corresponding to the given node.
+
+        :param node: The node to get the supernode for
+        :type node: int
+        :return: The supernode corresponding to the node.
+        """
+        return self.__supernodes[node]
+
     def __str__(self):
+        supernodes_str = ""
+        for supernode in self.__supernodes:
+            supernodes_str += str(supernode) + "\n"
         return str({
-            "Nodes": list(self.__graph.nodes),
+            "Super-Nodes": supernodes_str,
             "Edges": list(self.__graph.edges),
             "Contracted edge": self.__contracted_edge,
             "Iteration number": self.__iter_number
@@ -122,9 +147,12 @@ class SuperNode(object):
         elif type(supernode) == int:
             self.add_node(supernode)
 
+    def __str__(self):
+        return str({self.__node: str(self.__contracted_nodes)})
 
-def replace_edges_incident_to_contracted_node(edges: ListDict, contracted_incident_edges: list[tuple[int, int]],
-                                              contracted_node: int, contracting_node: int):
+
+def _replace_edges_incident_to_contracted_node(edges: ListDict, contracted_incident_edges: list[tuple[int, int]],
+                                               contracted_node: int, contracting_node: int):
     """
     For each edge (v, w)/(w, v) edge incident to the contracted node v, remove it from the edge list-dict and replace it
     with the new edge (u, w)/(w, u) incident to the contracting node.
@@ -196,7 +224,7 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
 
         # Replace (v, w) and (w, v) edges with (u, w) edges, if v is contracted into u
         incident = g_copy.edges(edge[1])
-        replace_edges_incident_to_contracted_node(
+        _replace_edges_incident_to_contracted_node(
             edges=remaining_edges,
             contracted_incident_edges=incident,
             contracting_node=edge[0],
@@ -211,7 +239,12 @@ def _edge_contraction(g: nx.Graph, return_all_steps: bool = False) -> (set[tuple
 
         # Add algorithm step graph to output if required
         if return_all_steps:
-            edge_contraction_step = EdgeContractionStep(graph=g_copy, contracted_edge=edge, iter_number=iter_number)
+            edge_contraction_step = EdgeContractionStep(
+                graph=g_copy,
+                supernodes=supernodes,
+                contracted_edge=edge,
+                iter_number=iter_number
+            )
             alg_steps.append(edge_contraction_step)
 
         iter_number += 1
@@ -290,3 +323,18 @@ def graph_from_df(df: pd.DataFrame) -> nx.Graph:
     g.add_edges_from(edges)
 
     return g
+
+
+def optimal_cut(g: nx.Graph) -> set[tuple[int, int]]:
+    """
+    Returns the minimum edge cut of the graph, applying the Edmonds-Karp or the Ford-Fulkerson algorithm.
+
+    :param g: nx.Graph
+    :type g: nx.Graph
+    :return: A set of edges that, if removed, would disconnect G. If source and target nodes are provided, the set
+        contains the edges that if removed, would destroy all paths between source and target.
+    """
+    if nx.is_connected(g):
+        return nx.algorithms.minimum_edge_cut(g)
+    else:
+        return set()
