@@ -47,8 +47,6 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
 * [Edge-contraction algorithm paper](https://dl.acm.org/doi/10.5555/313559.313605)
 * [Best-README template GitHub repository](https://github.com/othneildrew/Best-README-Template)
 
