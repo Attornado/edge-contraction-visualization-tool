@@ -7,10 +7,6 @@
 
 <!-- PROJECT LOGO -->
 <br />
-<div align="center">
-  ![Alt text](/app/assets/ecvt.png?raw=true)
-</div>
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
