@@ -31,10 +31,12 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-![Alt text](/app/assets/screenshot.png?raw=true)
 
 A simple visual tool allowing to visualize the execution of the Karger's edge-contraction
 algorithm.
+
+![Alt text](/app/assets/screenshot.png?raw=true)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
