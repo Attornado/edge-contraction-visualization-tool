@@ -18,7 +18,7 @@ _Y_MAX: final = 2
 NORMAL_EDGE_COLOR: final = "#888"
 SPECIAL_EDGE_COLOR: final = "#c71111"
 COLOR_PLOT_PALETTE: final = "YlGnBu"
-COLORS = {
+COLORS: final = {
     'background': '#111111',
     'text': '#7FDBFF'
 }
