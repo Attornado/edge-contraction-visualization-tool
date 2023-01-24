@@ -116,6 +116,9 @@ class ListDict(object):
         This class represent a list of items paired with a dictionary, which maps each item (that must be hash-able) to
         the corresponding position, hallowing to do operations like delete, retrieve and insert in O(1) time, as well as
         random selection.
+
+        :param initial_values: values to initialize the data structure with
+        :type initial_values: Optional[Iterable]
         """
         self.__item_to_position = {}
         self.__items = []

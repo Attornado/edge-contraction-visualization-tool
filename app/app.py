@@ -42,7 +42,7 @@ app.layout = main_page()
      State(component_id="edge-prob", component_property="value")],
     prevent_initial_call=True
 )
-def update_output_div(contents, n_clicks_random_graph, filename, show_steps: int, n_iter_max: int,
+def update_output_div(contents, _, filename, show_steps: int, n_iter_max: int,
                       n_nodes_random_graph: int, edge_probability_random_graph: float):
     """
     Callback handling the user input and the visualization of the graphs.

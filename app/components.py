@@ -101,7 +101,14 @@ def random_graph_options() -> html.Div:
     return html.Div([
         dbc.InputGroup([
             dbc.Input(type="number", min=1, max=1000, step=1, id="nodes", placeholder="Number of nodes"),
-            dbc.Input(type="number", min=0, max=1, step=0.01, id="edge-prob", placeholder="Edge probability"),
+            dbc.Input(
+                type="number",
+                min=0,
+                max=1,
+                step=0.01,
+                id="edge-prob",
+                placeholder="Node proximity threshold for a edge to be added"
+            ),
             dbc.Button("Generate random graph", id="random-graph-btn", n_clicks=0)
         ])
     ])
@@ -111,7 +118,7 @@ def algorithm_options() -> html.Div:
     return html.Div([
         dbc.InputGroup([
             html.Div([
-                dbc.Label(children=["Show algorithm steps"]),
+                dbc.Label(children=["Show algorithm steps (recommended for small or sparse graphs only, otherwise)"]),
                 show_steps_radio()
             ], className="radio-container"),
             dbc.Input(type="number", min=1, max=100000, step=1, id="n_iter_max", placeholder="Max iterations"),
