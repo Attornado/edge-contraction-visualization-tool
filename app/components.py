@@ -118,7 +118,16 @@ def algorithm_options() -> html.Div:
     return html.Div([
         dbc.InputGroup([
             html.Div([
-                dbc.Label(children=["Show algorithm steps (recommended for small or sparse graphs only, otherwise)"]),
+                dbc.Label(children=[
+                    html.Span("Show algorithm steps; recommended for small or sparse graphs only,"),
+                    html.Br(),
+                    html.Span([
+                        "otherwise execution time will increase from:",
+                        dcc.Markdown('$O\left(|V| + |E|\\right)$', mathjax=True),
+                        "to",
+                        dcc.Markdown('$O\left(|V| \\cdot \left(|V| + |E|\\right)\\right)$', mathjax=True)
+                    ])
+                ]),
                 show_steps_radio()
             ], className="radio-container"),
             dbc.Input(type="number", min=1, max=100000, step=1, id="n_iter_max", placeholder="Max iterations"),

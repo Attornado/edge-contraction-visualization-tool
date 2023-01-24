@@ -14,7 +14,8 @@ EXTERNAL_STYLESHEETS: final = [
     dbc.themes.BOOTSTRAP
 ]
 EXTERNAL_SCRIPTS: final = [
-    "https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+    "https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js",
+
 ]
 LOG_CONTRACTION: final = False
 
