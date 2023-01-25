@@ -30,24 +30,30 @@ A simple visual tool allowing to visualize the execution of the Karger's edge-co
 algorithm.
 
 #### Homepage form to set algorithm and graph parameters
-![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/readme-imgs/home-alg-options.png?raw=true)
 
 #### Random graph generation
-![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/readme-imgs/random-gen.png?raw=true)
 
 #### Edge-contraction steps
-![Alt text](/app/assets/screenshot.png?raw=true)
-![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/readme-imgs/step0.png?raw=true)
+
+![Alt text](/app/assets/readme-imgs/step1.png?raw=true)
+
+![Alt text](/app/assets/readme-imgs/step2.png?raw=true)
+
+![Alt text](/app/assets/readme-imgs/step3.png?raw=true)
 
 #### Cut found by the edge-contraction algorithm
-![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/readme-imgs/final-cut.png?raw=true)
 
 #### Optimal cut
-![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/readme-imgs/optimal-cut.png?raw=true)
 
 #### Cut comparison table and metrics
-![Alt text](/app/assets/screenshot.png?raw=true)
-![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/readme-imgs/comparison-table.png?raw=true)
+
+![Alt text](/app/assets/readme-imgs/metrics.png?raw=true)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
