@@ -157,7 +157,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Matplotlib-url]: https://matplotlib.org/
 [Dash]: https://svgshare.com/getbyhash/sha1-rP+R9ynV+Lb+plNuV5j6jx9G10c=
 [Dash-url]: https://dash.plotly.com/
-[NetworkX]: https://img.shields.io/badge/NetworkX-07548c?style=for-the-badge&logo=Nx
+[NetworkX]: https://svgshare.com/getbyhash/sha1-xg9rckqBiF6LDNPNh+JBiGiAr7s=
 [NetworkX-url]: https://networkx.org/documentation/stable/index.html
 [Plotly]: https://img.shields.io/badge/Plotly-100000?style=for-the-badge&logo=plotly&logoColor=white&labelColor=660169&color=660169
 [Plotly-url]: https://plotly.com/
