@@ -57,7 +57,7 @@ algorithm.
 #### Front-end technologies
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
-* [![React.js]][React-url[
+* [![React.js]][React-url]
 * [![Dash]][Dash-url]
 
 
