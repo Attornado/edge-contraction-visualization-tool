@@ -29,6 +29,24 @@
 A simple visual tool allowing to visualize the execution of the Karger's edge-contraction
 algorithm.
 
+#### Homepage form to set algorithm and graph parameters
+![Alt text](/app/assets/screenshot.png?raw=true)
+
+#### Random graph generation
+![Alt text](/app/assets/screenshot.png?raw=true)
+
+#### Edge-contraction steps
+![Alt text](/app/assets/screenshot.png?raw=true)
+![Alt text](/app/assets/screenshot.png?raw=true)
+
+#### Cut found by the edge-contraction algorithm
+![Alt text](/app/assets/screenshot.png?raw=true)
+
+#### Optimal cut
+![Alt text](/app/assets/screenshot.png?raw=true)
+
+#### Cut comparison table and metrics
+![Alt text](/app/assets/screenshot.png?raw=true)
 ![Alt text](/app/assets/screenshot.png?raw=true)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
