@@ -36,24 +36,19 @@ algorithm.
 
 ## Technologies
 
-#### Blockchain-side technologies
-* [![Ethereum]][Ethereum-url]
-* [![Solidity]][Solidity-url]
-* [![Web3Py]][Web3Py-url]
-* [![Truffle]][Truffle-url]
-* [![Ganache]][Ganache-url]
-* [![IPFS]][IPFS-url]
-
-#### Data & graph processing management technologies
+#### Data & graph processing management
 * [![NetworkX]][NetworkX-url]
 * [![Pandas]][Pandas-url]
 * [![Numpy]][Numpy-url]
 
+#### Data visualization
+* [![Plotly]][Plotly-url]
 
-#### Server-side technologies
+#### Server-side
+* [![Dash]][Dash-url]
 * [![Flask]][Flask-url]
 
-#### Front-end technologies
+#### Front-end
 * [![Dash]][Dash-url]
 * [![React.js]][React-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
@@ -139,3 +134,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Dash-url]: https://dash.plotly.com/
 [NetworkX]: https://img.shields.io/badge/NetworkX-07548c?style=for-the-badge&logo=Nx
 [NetworkX-url]: https://networkx.org/documentation/stable/index.html
+[Plotly]: https://img.shields.io/badge/Plotly-100000?style=for-the-badge&logo=plotly&logoColor=white&labelColor=660169&color=660169
+[Plotly-url]: https://plotly.com/
