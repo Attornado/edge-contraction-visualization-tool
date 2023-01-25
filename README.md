@@ -44,7 +44,7 @@ algorithm.
 * [![Ganache]][Ganache-url]
 * [![IPFS]][IPFS-url]
 
-#### Data & visualization management technologies
+#### Data & graph processing management technologies
 * [![MongoDB]][MongoDB-url]
 * [![Pandas]][Pandas-url]
 * [![Numpy]][Numpy-url]
@@ -55,10 +55,10 @@ algorithm.
 * [![Flask]][Flask-url]
 
 #### Front-end technologies
+* [![Dash]][Dash-url]
+* [![React.js]][React-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![JQuery][JQuery.com]][JQuery-url]
-* [![React.js]][React-url]
-* [![Dash]][Dash-url]
 
 
 <!-- LICENSE -->
@@ -138,4 +138,5 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [Matplotlib-url]: https://matplotlib.org/
 [Dash]: https://img.shields.io/badge/Dash-100000?style=for-the-badge&logo=Dash&logoColor=white&labelColor=09B69F&color=09B69F
 [Dash-url]: https://dash.plotly.com/
-
+[NetworkX]: https://img.shields.io/badge/NetworkX-07548c?style=for-the-badge&logo=Nx
+[NetworkX-url]: https://networkx.org/documentation/stable/index.html
