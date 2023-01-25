@@ -15,7 +15,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
     </li>
-    <li><a href="technologies">Technologies</a>
+    <li><a href="#technologies">Technologies</a>
     <li><a href="#license">License</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
