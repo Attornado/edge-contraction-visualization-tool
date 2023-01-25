@@ -45,10 +45,9 @@ algorithm.
 * [![IPFS]][IPFS-url]
 
 #### Data & graph processing management technologies
-* [![MongoDB]][MongoDB-url]
+* [![NetworkX]][NetworkX-url]
 * [![Pandas]][Pandas-url]
 * [![Numpy]][Numpy-url]
-* [![Matplotlib]][Matplotlib-url]
 
 
 #### Server-side technologies
