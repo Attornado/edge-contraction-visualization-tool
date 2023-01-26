@@ -110,11 +110,11 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [product-screenshot]: images/screenshot.png
 [project-logo]: app/assets/ecvt.png
 [contributors-shield]: https://img.shields.io/github/contributors/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
+[contributors-url]: https://github.com/Attornado/edge-contraction-visualization-tool/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
 [forks-url]: https://github.com/Attornado/edge-contraction-visualization-tool/network/members
 [stars-shield]: https://img.shields.io/github/stars/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
+[stars-url]: https://github.com/Attornado/edge-contraction-visualization-tool/stargazers
 [issues-shield]: https://img.shields.io/github/issues/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
 [issues-url]: https://github.com/Attornado/edge-contraction-visualization-tool/issues
 [license-shield]: https://img.shields.io/github/license/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
