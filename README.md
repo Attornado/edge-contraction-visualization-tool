@@ -1,3 +1,9 @@
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT][license-shield]][license-url]
+
 # ECVT: Edge-Contraction Visualization Tool
 
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
@@ -103,16 +109,16 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 [JQuery-url]: https://jquery.com
 [product-screenshot]: images/screenshot.png
 [project-logo]: app/assets/ecvt.png
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
+[contributors-shield]: https://img.shields.io/github/contributors/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
 [contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
+[forks-shield]: https://img.shields.io/github/forks/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
+[forks-url]: https://github.com/Attornado/edge-contraction-visualization-tool/network/members
+[stars-shield]: https://img.shields.io/github/stars/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
 [stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
+[issues-shield]: https://img.shields.io/github/issues/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
+[issues-url]: https://github.com/Attornado/edge-contraction-visualization-tool/issues
+[license-shield]: https://img.shields.io/github/license/Attornado/edge-contraction-visualization-tool.svg?style=for-the-badge
+[license-url]: https://github.com/Attornado/edge-contraction-visualization-tool/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: images/screenshot.png
